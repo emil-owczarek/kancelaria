@@ -125,6 +125,53 @@
     <!-- Delikatny gradient u dołu -->
     <!-- <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent"></div> -->
   </section>
+
+  <!-- SEKCA: Zaufanie i doświadczenie -->
+  <section class="bg-white text-neutral-900" id="doswiadczenie">
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:py-24">
+      <div class="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-center">
+        <figure class="relative isolate overflow-hidden rounded-[32px] bg-neutral-100 shadow-[0_40px_120px_rgba(18,18,18,0.18)]">
+          <img
+            src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
+            alt="Zespół prawników uśmiecha się do zdjęcia"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+          <figcaption class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-neutral-900/75 px-4 py-2 text-xs uppercase tracking-wide text-white backdrop-blur">
+            <span class="font-semibold">iStock</span>
+            <span class="text-white/70">Credit: Rawpixel</span>
+          </figcaption>
+        </figure>
+
+        <div class="lg:pl-10 xl:pl-16">
+          <p class="text-sm font-semibold uppercase tracking-[0.4em] text-red-800">Zaufanie budowane latami</p>
+          <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-950 sm:text-5xl">
+            Wspieramy przedsiębiorców w&nbsp;każdym etapie rozwoju
+          </h2>
+          <p class="mt-6 text-base leading-relaxed text-neutral-600 sm:text-lg">
+            Od pierwszych kroków na rynku po złożone procesy fuzji i&nbsp;przejęć – prowadzimy naszych Klientów przez każdy etap rozwoju biznesu. Nasz zespół łączy doświadczenie, specjalistyczną wiedzę oraz partnerskie podejście.
+          </p>
+
+          <div class="mt-12 space-y-6">
+            <div class="flex flex-col gap-2 border-l-4 border-red-700 pl-6">
+              <span class="text-4xl font-semibold text-neutral-950">1200+</span>
+              <span class="text-sm uppercase tracking-[0.2em] text-neutral-500">Zadowolonych klientów</span>
+            </div>
+
+            <div class="flex flex-col gap-2 border-l-4 border-red-700 pl-6">
+              <span class="text-4xl font-semibold text-neutral-950">25+</span>
+              <span class="text-sm uppercase tracking-[0.2em] text-neutral-500">Lat doświadczenia</span>
+            </div>
+
+            <div class="flex flex-col gap-2 border-l-4 border-red-700 pl-6">
+              <span class="text-4xl font-semibold text-neutral-950">35</span>
+              <span class="text-sm uppercase tracking-[0.2em] text-neutral-500">Nagród i wyróżnień</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <?php
 // --- SEKCA NASZ ZESPÓŁ ---
 echo do_shortcode('[team_section subtitle="NASZ ZESPÓŁ" title="Specjaliści w różnych dziedzinach prawa"]');
