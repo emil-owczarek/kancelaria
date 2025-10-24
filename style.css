@@ -10,3 +10,107 @@ License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: law, kancelaria, business, responsive
 */
+
+[data-accordion-icon] {
+    position: relative;
+  }
+  
+  [data-accordion-icon] .accordion-line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: currentColor;
+    border-radius: 9999px;
+    pointer-events: none;
+  }
+  
+  [data-accordion-icon] .accordion-line--horizontal {
+    width: 16px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+  }
+  
+  [data-accordion-icon] .accordion-line--vertical {
+    width: 2px;
+    height: 16px;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+  }
+  
+  [data-accordion-item].is-open [data-accordion-icon] .accordion-line--vertical {
+    transform: translate(-50%, -50%) scaleY(0);
+  }
+
+
+   [data-accordion-item] [data-accordion-content] {
+    display: grid; 
+    grid-template-rows: 0fr;
+    transition: 250ms grid-template-rows ease;
+
+    p {
+        padding: 0 24px 24px;
+    }
+
+    > div {
+        overflow: hidden;
+    }
+}
+
+[data-accordion-item].is-open [data-accordion-content] {
+    grid-template-rows: 1fr;
+}
+
+/* Delikatna korekcja barwna i kontrastu pod ciepłe, czerwone tło */
+.person-img{
+    filter:
+      saturate(1.05)
+      contrast(1.06)
+      brightness(0.98)
+      hue-rotate(-6deg);
+    /* miękki cień, ale krótki – długi cień wygląda sztucznie */
+    filter: drop-shadow(0 24px 32px rgba(0,0,0,.45));
+  }
+  
+  /* Kontener do masek i „kontakt z ziemią” */
+  .person-wrap{
+    position: relative;
+    isolation: isolate; /* żeby blend/overlay nie wpływał na resztę */
+  }
+  
+  /* Subtelne przyciemnienie od prawej – pomaga „wtopić” w tło */
+  .person-wrap::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(90deg, transparent 60%, rgba(0,0,0,.25) 100%);
+    pointer-events:none;
+    z-index:-1;
+  }
+  
+  /* Kontakt z podłożem: eliptyczny cień pod stopami */
+  .person-wrap::after{
+    content:"";
+    position:absolute; left:50%; bottom:-8px; transform:translateX(-10%);
+    width:min(52%,520px); height:42px;
+    background: radial-gradient(50% 100% at 50% 50%, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 75%);
+    filter: blur(6px);
+    pointer-events:none;
+    z-index:-1;
+  }
+  
+  /* Miękkie wygaszenie krawędzi PNG (usuwa „ostre wycięcie”) – działa w nowoczesnych przeglądarkach */
+  @supports (mask-image: linear-gradient(#000, #000)) {
+    .person-img{
+      -webkit-mask-image: radial-gradient(140% 140% at 60% 40%, #000 60%, rgba(0,0,0,0) 100%);
+              mask-image: radial-gradient(140% 140% at 60% 40%, #000 60%, rgba(0,0,0,0) 100%);
+      /* mask wygasza skrajne piksele; wartości możesz wyklikać */
+    }
+  }
+  
+  /* Opcjonalnie: blend, jeśli PNG jest zbyt „płaskie” vs tło.
+     Używaj oszczędnie – różne przeglądarki różnie liczą.
+  */
+  @media (min-width: 1024px){
+    .person-img{
+      mix-blend-mode: normal; /* ewentualnie multiply przy bardzo jasnym PNG */
+    }
+  }

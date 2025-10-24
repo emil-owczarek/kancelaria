@@ -17,7 +17,7 @@ add_action('init', function () {
     'has_archive'  => false,
     'rewrite'      => ['slug' => 'zespol'],
     'show_in_rest' => true, // edycja w Gutenbergu
-    'supports' => ['title','editor','excerpt','thumbnail','page-attributes'],
+    'supports'     => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
   ]);
 
   // Taksonomia: Specjalizacja / dziedzina prawa
@@ -29,6 +29,22 @@ add_action('init', function () {
     'public'       => true,
     'hierarchical' => false,
     'rewrite'      => ['slug' => 'specjalizacja'],
+    'show_in_rest' => true,
+  ]);
+
+  // CPT: Specjalizacje (obszary kompetencji)
+  register_post_type('specialization', [
+    'labels' => [
+      'name'          => __('Specjalizacje', 'your-textdomain'),
+      'singular_name' => __('Specjalizacja', 'your-textdomain'),
+      'add_new_item'  => __('Dodaj specjalizację', 'your-textdomain'),
+      'edit_item'     => __('Edytuj specjalizację', 'your-textdomain'),
+    ],
+    'public'       => true,
+    'menu_icon'    => 'dashicons-lightbulb',
+    'supports'     => ['title', 'editor', 'excerpt', 'page-attributes'],
+    'has_archive'  => false,
+    'rewrite'      => ['slug' => 'specjalizacje'],
     'show_in_rest' => true,
   ]);
 });
@@ -44,6 +60,14 @@ add_action('after_setup_theme', function () {
  * Jeśli Tailwind już masz w motywie, zostaw tylko Splide.
  */
 add_action('wp_enqueue_scripts', function () {
+  // Główny CSS motywu
+  wp_enqueue_style(
+    'kancelaria-style',
+    get_stylesheet_uri(),
+    [],
+    '1.0.0'
+  );
+
   // Splide (slider)
   wp_enqueue_style(
     'splide',
@@ -60,34 +84,262 @@ add_action('wp_enqueue_scripts', function () {
   );
 
   // Nasz init JS
-  wp_add_inline_script('splide', "
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('[data-team-splide]').forEach(function(el){
-        var slides = el.querySelectorAll('.splide__slide').length;
-        var enableSlider = parseInt(el.getAttribute('data-min')) || 2; // włącz gdy >4
-        if (slides >= enableSlider) {
-          new Splide(el, {
-            type      : 'slide',
-            perPage   : 4,
-            gap       : '2rem',
-            arrows    : true,
-            pagination: false,
-            breakpoints: {
-              1280: { perPage: 3, gap: '1.5rem' },
-              1024: { perPage: 2, gap: '1.25rem' },
-              640 : { perPage: 1, gap: '1rem' }
-            }
-          }).mount();
-        } else {
-          // jeśli brak slidera – usuń wrappery Splide, zostaw responsywną siatkę
-          el.classList.add('not-splide');
-          var track = el.querySelector('.splide__track');
-          var list  = el.querySelector('.splide__list');
-          if (track && list) { track.replaceWith(list); list.classList.remove('splide__list'); }
+  wp_add_inline_script('splide', <<<'JS'
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-team-splide]').forEach(function (el) {
+    var slides = el.querySelectorAll('.splide__slide').length;
+    var enableSlider = parseInt(el.getAttribute('data-min')) || 2; // włącz gdy >4
+    if (slides >= enableSlider) {
+      new Splide(el, {
+        type: 'slide',
+        perPage: 4,
+        gap: '2rem',
+        arrows: true,
+        pagination: false,
+        breakpoints: {
+          1280: { perPage: 3, gap: '1.5rem' },
+          1024: { perPage: 2, gap: '1.25rem' },
+          640: { perPage: 1, gap: '1rem' }
         }
+      }).mount();
+    } else {
+      // jeśli brak slidera – usuń wrappery Splide, zostaw responsywną siatkę
+      el.classList.add('not-splide');
+      var track = el.querySelector('.splide__track');
+      var list = el.querySelector('.splide__list');
+      if (track && list) {
+        track.replaceWith(list);
+        list.classList.remove('splide__list');
+      }
+    }
+  });
+
+  
+
+  document.querySelectorAll('[data-accordion]').forEach(function (wrapper) {
+    var openFirstAttr = wrapper.getAttribute('data-open-first');
+    var singleAttr = wrapper.getAttribute('data-accordion-single');
+    var shouldOpenFirst = openFirstAttr !== 'false';
+    var allowMultiple = singleAttr === 'false';
+    var items = wrapper.querySelectorAll('[data-accordion-item]');
+
+    items.forEach(function (item, index) {
+      var button = item.querySelector('[data-accordion-trigger]');
+      var content = item.querySelector('[data-accordion-content]');
+      if (!button || !content) {
+        return;
+      }
+
+      var startOpen = shouldOpenFirst && index === 0;
+      button.setAttribute('aria-expanded', startOpen ? 'true' : 'false');
+      item.classList.toggle('is-open', startOpen);
+      // content.classList.toggle('hidden', !startOpen);
+
+      button.addEventListener('click', function () {
+        var isExpanded = button.getAttribute('aria-expanded') === 'true';
+        var willOpen = !isExpanded;
+
+        if (!allowMultiple && willOpen) {
+          items.forEach(function (otherItem) {
+            if (otherItem === item) {
+              return;
+            }
+            var otherButton = otherItem.querySelector('[data-accordion-trigger]');
+            var otherContent = otherItem.querySelector('[data-accordion-content]');
+            if (!otherButton || !otherContent) {
+              return;
+            }
+            otherButton.setAttribute('aria-expanded', 'false');
+            otherItem.classList.remove('is-open');
+            // otherContent.classList.add('hidden');
+          });
+        }
+
+        button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        item.classList.toggle('is-open', willOpen);
+        // content.classList.toggle('hidden', !willOpen);
       });
     });
-  ");
+  });
+});
+JS
+  );
+});
+
+/**
+ * ===== Customizer: mapa kancelarii =====
+ */
+function law_firm_sanitize_float($value)
+{
+  return is_numeric($value) ? $value : '';
+}
+
+function law_firm_sanitize_zoom($value)
+{
+  $value = intval($value);
+  if ($value < 1 || $value > 20) {
+    $value = 16;
+  }
+
+  return $value;
+}
+
+add_action('customize_register', function ($wp_customize) {
+  $wp_customize->add_section('law_firm_map_section', [
+    'title'       => __('Mapa kancelarii', 'your-textdomain'),
+    'description' => __('Skonfiguruj wyświetlanie mapy z lokalizacją biura.', 'your-textdomain'),
+    'priority'    => 160,
+  ]);
+
+  $wp_customize->add_setting('law_firm_map_api_key', [
+    'type'              => 'theme_mod',
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control('law_firm_map_api_key', [
+    'label'       => __('Klucz API Google Maps', 'your-textdomain'),
+    'section'     => 'law_firm_map_section',
+    'settings'    => 'law_firm_map_api_key',
+    'type'        => 'text',
+    'description' => __('Wprowadź klucz API z Google Cloud Console (Maps JavaScript API).', 'your-textdomain'),
+  ]);
+
+  $wp_customize->add_setting('law_firm_map_lat', [
+    'type'              => 'theme_mod',
+    'default'           => '50.064650',
+    'sanitize_callback' => 'law_firm_sanitize_float',
+  ]);
+
+  $wp_customize->add_control('law_firm_map_lat', [
+    'label'    => __('Szerokość geograficzna', 'your-textdomain'),
+    'section'  => 'law_firm_map_section',
+    'settings' => 'law_firm_map_lat',
+    'type'     => 'number',
+    'input_attrs' => [
+      'step' => '0.000001',
+    ],
+  ]);
+
+  $wp_customize->add_setting('law_firm_map_lng', [
+    'type'              => 'theme_mod',
+    'default'           => '19.944980',
+    'sanitize_callback' => 'law_firm_sanitize_float',
+  ]);
+
+  $wp_customize->add_control('law_firm_map_lng', [
+    'label'    => __('Długość geograficzna', 'your-textdomain'),
+    'section'  => 'law_firm_map_section',
+    'settings' => 'law_firm_map_lng',
+    'type'     => 'number',
+    'input_attrs' => [
+      'step' => '0.000001',
+    ],
+  ]);
+
+  $wp_customize->add_setting('law_firm_map_zoom', [
+    'type'              => 'theme_mod',
+    'default'           => 16,
+    'sanitize_callback' => 'law_firm_sanitize_zoom',
+  ]);
+
+  $wp_customize->add_control('law_firm_map_zoom', [
+    'label'       => __('Powiększenie mapy (1–20)', 'your-textdomain'),
+    'section'     => 'law_firm_map_section',
+    'settings'    => 'law_firm_map_zoom',
+    'type'        => 'number',
+    'input_attrs' => [
+      'min'  => 1,
+      'max'  => 20,
+      'step' => 1,
+    ],
+  ]);
+
+  $wp_customize->add_setting('law_firm_map_label', [
+    'type'              => 'theme_mod',
+    'default'           => __('Kancelaria Adwokacka Paweł Noworolnik', 'your-textdomain'),
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control('law_firm_map_label', [
+    'label'    => __('Podpis pinezki', 'your-textdomain'),
+    'section'  => 'law_firm_map_section',
+    'settings' => 'law_firm_map_label',
+    'type'     => 'text',
+  ]);
+
+  $wp_customize->add_setting('law_firm_map_address', [
+    'type'              => 'theme_mod',
+    'default'           => __('ul. Pawia 5, 31-154 Kraków', 'your-textdomain'),
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control('law_firm_map_address', [
+    'label'    => __('Adres wyświetlany obok mapy', 'your-textdomain'),
+    'section'  => 'law_firm_map_section',
+    'settings' => 'law_firm_map_address',
+    'type'     => 'text',
+  ]);
+});
+
+add_action('wp_footer', function () {
+  if (!is_front_page() && !is_home()) {
+    return;
+  }
+
+  ?>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var mapContainer = document.querySelector('[data-law-map]');
+      if (!mapContainer) {
+        return;
+      }
+
+      var apiKey = mapContainer.dataset.apiKey;
+      if (!apiKey) {
+        return;
+      }
+
+      var lat = parseFloat(mapContainer.dataset.lat);
+      var lng = parseFloat(mapContainer.dataset.lng);
+      var zoom = parseInt(mapContainer.dataset.zoom || '16', 10);
+      var markerTitle = mapContainer.dataset.markerTitle || '';
+
+      function initLawFirmMap() {
+        if (typeof google === 'undefined' || !google.maps) {
+          return;
+        }
+
+        var position = { lat: lat, lng: lng };
+        var map = new google.maps.Map(mapContainer, {
+          center: position,
+          zoom: zoom,
+          styles: mapContainer.dataset.mapStyle ? JSON.parse(mapContainer.dataset.mapStyle) : null,
+          disableDefaultUI: true,
+          zoomControl: true,
+        });
+
+        new google.maps.Marker({
+          position: position,
+          map: map,
+          title: markerTitle,
+        });
+      }
+
+      window.lawFirmInitMap = initLawFirmMap;
+
+      if (typeof google !== 'undefined' && google.maps) {
+        initLawFirmMap();
+        return;
+      }
+
+      var script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(apiKey) + '&callback=lawFirmInitMap';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    });
+  </script>
+  <?php
 });
 
 /**
@@ -193,6 +445,148 @@ add_shortcode('team_section', function ($atts) {
     </div>
   </section>
 
+  <?php
+  return ob_get_clean();
+});
+
+/**
+ * ===== Meta box dla ikony specjalizacji =====
+ */
+add_action('add_meta_boxes', function () {
+  add_meta_box(
+    'specialization_icon',
+    __('Ikona specjalizacji', 'your-textdomain'),
+    function ($post) {
+      wp_nonce_field('save_specialization_icon', 'specialization_icon_nonce');
+      $value = get_post_meta($post->ID, '_specialization_icon', true);
+      ?>
+      <p><?php esc_html_e('Wklej SVG, emoji lub krótki HTML wyświetlany w nagłówku akordeonu.', 'your-textdomain'); ?></p>
+      <textarea name="specialization_icon" class="widefat" rows="4"><?php echo esc_textarea($value); ?></textarea>
+      <?php
+    },
+    'specialization',
+    'side'
+  );
+});
+
+add_action('save_post_specialization', function ($post_id) {
+  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+    return;
+  }
+
+  if (!isset($_POST['specialization_icon_nonce']) || !wp_verify_nonce($_POST['specialization_icon_nonce'], 'save_specialization_icon')) {
+    return;
+  }
+
+  if (!current_user_can('edit_post', $post_id)) {
+    return;
+  }
+
+  if (isset($_POST['specialization_icon'])) {
+    $icon = wp_kses_post(wp_unslash($_POST['specialization_icon']));
+    if ($icon) {
+      update_post_meta($post_id, '_specialization_icon', $icon);
+    } else {
+      delete_post_meta($post_id, '_specialization_icon');
+    }
+  }
+});
+
+/**
+ * ===== Shortcode [specializations_section] =====
+ */
+add_shortcode('specializations_section', function ($atts) {
+  $atts = shortcode_atts([
+    'title'       => __('Obszary naszych kompetencji', 'your-textdomain'),
+    'subtitle'    => __('Usługi', 'your-textdomain'),
+    'description' => '',
+    'open_first'  => 'true',
+    'count'       => -1,
+  ], $atts);
+
+  $query = new WP_Query([
+    'post_type'      => 'specialization',
+    'posts_per_page' => intval($atts['count']),
+    'orderby'        => 'menu_order title',
+    'order'          => 'ASC',
+  ]);
+
+  if (!$query->have_posts()) {
+    return '';
+  }
+
+  $open_first = true;
+  if (isset($atts['open_first'])) {
+    $value = filter_var($atts['open_first'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    if ($value !== null) {
+      $open_first = $value;
+    }
+  }
+
+  ob_start();
+  ?>
+  <section id="uslugi" class="bg-[#f4f2f5] py-20 md:py-24">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="grid gap-12 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:items-start">
+        <div class="max-w-xl">
+          <div class="text-sm font-semibold uppercase tracking-[0.35em] text-red-800"><?php echo esc_html($atts['subtitle']); ?></div>
+          <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl"><?php echo esc_html($atts['title']); ?></h2>
+          <?php if (!empty($atts['description'])) : ?>
+            <p class="mt-6 text-base leading-relaxed text-neutral-600"><?php echo wp_kses_post($atts['description']); ?></p>
+          <?php endif; ?>
+        </div>
+
+        <div class="space-y-4" data-accordion data-open-first="<?php echo $open_first ? 'true' : 'false'; ?>" data-accordion-single="true">
+          <?php
+          while ($query->have_posts()) {
+            $query->the_post();
+            $id = get_the_ID();
+            $icon = get_post_meta($id, '_specialization_icon', true);
+            $excerpt = get_the_excerpt();
+            $content = apply_filters('the_content', get_the_content());
+            $content = wp_kses_post($content);
+            $content_id = 'spec-content-' . $id;
+            ?>
+            <div class="rounded-2xl border border-neutral-200 bg-white/90 shadow-sm transition-shadow hover:shadow-md" data-accordion-item>
+              <button type="button" class="flex w-full items-center justify-between gap-6 px-6 py-5 text-left" data-accordion-trigger aria-expanded="false" aria-controls="<?php echo esc_attr($content_id); ?>">
+                <span class="flex flex-1 items-start gap-4">
+                  <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
+                    <?php
+                    if (!empty($icon)) {
+                      echo wp_kses_post($icon);
+                    } else {
+                      ?>
+                      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                      <?php
+                    }
+                    ?>
+                  </span>
+                  <span class="flex-1">
+                    <span class="block text-lg font-medium text-neutral-900 md:text-xl"><?php the_title(); ?></span>
+                    <?php if (!empty($excerpt)) : ?>
+                      <span class="mt-1 block text-sm text-neutral-500"><?php echo esc_html($excerpt); ?></span>
+                    <?php endif; ?>
+                  </span>
+                </span>
+                <span class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-900" data-accordion-icon>
+                  <span class="accordion-line accordion-line--horizontal"></span>
+                  <span class="accordion-line accordion-line--vertical"></span>
+                </span>
+              </button>
+              <div id="<?php echo esc_attr($content_id); ?>" class="" data-accordion-content>
+                <div class="prose prose-neutral max-w-none text-neutral-600">
+                  <?php echo $content; ?>
+                </div>
+              </div>
+            </div>
+            <?php
+          }
+          wp_reset_postdata();
+          ?>
+        </div>
+      </div>
+    </div>
+  </section>
   <?php
   return ob_get_clean();
 });
