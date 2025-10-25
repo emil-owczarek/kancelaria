@@ -366,9 +366,9 @@ add_shortcode('team_section', function ($atts) {
   $total = $q->found_posts;
   ?>
 
-  <section class="bg-neutral-50">
+  <section class="bg-neutral-50 section-rise">
     <div class="mx-auto max-w-7xl px-6 py-16">
-      <div class="mb-10">
+      <div class="mb-10 rise-child">
         <div class="text-sm tracking-widest text-red-800 font-semibold"><?php echo esc_html($atts['subtitle']); ?></div>
         <h2 class="mt-2 text-4xl md:text-5xl font-semibold leading-tight text-neutral-900">
           <?php echo esc_html($atts['title']); ?>
@@ -376,10 +376,11 @@ add_shortcode('team_section', function ($atts) {
         <div class="mt-6 border-t border-neutral-300"></div>
       </div>
 
-      <div class="splide" data-team-splide data-min="2">
+      <div class="splide rise-child" data-team-splide data-min="2" style="--rise-delay: 0.35s;">
         <div class="splide__track">
           <ul class="splide__list">
             <?php
+            $index = 0;
             while ($q->have_posts()) { $q->the_post();
               $id   = get_the_ID();
               $img  = get_the_post_thumbnail($id, 'team-card', ['class' => 'w-full h-auto object-cover']);
@@ -391,8 +392,9 @@ add_shortcode('team_section', function ($atts) {
               // opis na hover: excerpt lub fragment treści
               $desc = get_the_excerpt();
               if (!$desc) $desc = wp_trim_words( wp_strip_all_tags(get_the_content()), 35);
+              $delay = 0.45 + ($index * 0.05);
               ?>
-              <li class="splide__slide">
+              <li class="splide__slide rise-child" style="--rise-delay: <?php echo esc_attr(number_format($delay, 2)); ?>s;">
                 <article class="group">
                   <div class="relative aspect-[4/4.7] overflow-hidden bg-neutral-200">
                     <?php if ($img) { echo $img; } ?>
@@ -424,6 +426,7 @@ add_shortcode('team_section', function ($atts) {
                 </article>
               </li>
               <?php
+              $index++;
             }
             wp_reset_postdata();
             ?>
@@ -525,10 +528,10 @@ add_shortcode('specializations_section', function ($atts) {
 
   ob_start();
   ?>
-  <section id="uslugi" class="bg-[#f4f2f5] py-20 md:py-24">
+  <section id="uslugi" class="bg-[#f4f2f5] py-20 md:py-24 section-rise">
     <div class="mx-auto max-w-7xl px-6">
       <div class="grid gap-12 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:items-start">
-        <div class="max-w-xl">
+        <div class="max-w-xl rise-child">
           <div class="text-sm font-semibold uppercase tracking-[0.35em] text-red-800"><?php echo esc_html($atts['subtitle']); ?></div>
           <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl"><?php echo esc_html($atts['title']); ?></h2>
           <?php if (!empty($atts['description'])) : ?>
@@ -536,8 +539,9 @@ add_shortcode('specializations_section', function ($atts) {
           <?php endif; ?>
         </div>
 
-        <div class="space-y-4" data-accordion data-open-first="<?php echo $open_first ? 'true' : 'false'; ?>" data-accordion-single="true">
+        <div class="space-y-4 rise-child" data-accordion data-open-first="<?php echo $open_first ? 'true' : 'false'; ?>" data-accordion-single="true" style="--rise-delay: 0.35s;">
           <?php
+          $item_index = 0;
           while ($query->have_posts()) {
             $query->the_post();
             $id = get_the_ID();
@@ -546,8 +550,9 @@ add_shortcode('specializations_section', function ($atts) {
             $content = apply_filters('the_content', get_the_content());
             $content = wp_kses_post($content);
             $content_id = 'spec-content-' . $id;
+            $item_delay = 0.45 + ($item_index * 0.05);
             ?>
-            <div class="rounded-2xl border border-neutral-200 bg-white/90 shadow-sm transition-shadow hover:shadow-md" data-accordion-item>
+            <div class="rounded-2xl border border-neutral-200 bg-white/90 shadow-sm transition-shadow hover:shadow-md rise-child" data-accordion-item style="--rise-delay: <?php echo esc_attr(number_format($item_delay, 2)); ?>s;">
               <button type="button" class="flex w-full items-center justify-between gap-6 px-6 py-5 text-left" data-accordion-trigger aria-expanded="false" aria-controls="<?php echo esc_attr($content_id); ?>">
                 <span class="flex flex-1 items-start gap-4">
                   <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
@@ -580,6 +585,7 @@ add_shortcode('specializations_section', function ($atts) {
               </div>
             </div>
             <?php
+            $item_index++;
           }
           wp_reset_postdata();
           ?>

@@ -19,6 +19,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kancelaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Tailwind via CDN (z produkcyjnym projektem możesz to usunąć i użyć swojego bundla) -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -32,6 +35,9 @@
       }
     }
   </script>
+  <script>
+    document.documentElement.classList.add('js');
+  </script>
   <?php wp_head(); ?>
 </head>
 <body class="bg-black text-white antialiased">
@@ -41,7 +47,7 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem
 }
-  
+
   .mask-line {
   display: inline-block;
   white-space: nowrap;
@@ -55,6 +61,17 @@
   -webkit-mask-repeat: no-repeat;
   animation: revealMask 2s ease-in forwards;
   animation-delay: var(--delay, 0s);
+}
+
+.hero-subtext {
+  font-family: 'Tangerine', cursive;
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.hero-subtext .mask-line {
+  padding-left: 0;
 }
 
 @keyframes revealMask {
@@ -129,8 +146,8 @@
     <div class="relative z-10 mx-auto grid min-h-[60vh] max-w-7xl grid-cols-12 items-center px-6 pt-4 md:pb-24 md:pt-10">
       <!-- LEWA kolumna: tekst -->
       <div class="col-span-12 md:col-span-7 lg:col-span-6">
-      <p class="mb-4 text-lg italic text-white/70">
-          <span class="mask-line" style="--delay: 1s;">Prawo, które rozumie biznes.</span>
+      <p class="hero-subtext mb-4 text-lg italic text-white/70">
+          <span class="mask-line pt-5" style="--delay: 1s;">Prawo, które rozumie biznes.</span>
         </p>
         <h1 class="text-4xl leading-tight font-semibold tracking-tight sm:text-5xl md:text-6xl">
           Twoi prawnicy<br />
@@ -171,10 +188,10 @@
   </section>
 
     <!-- SEKCA: Zaufanie i doświadczenie -->
-    <section class="bg-neutral-50 text-neutral-900" id="doswiadczenie">
+    <section class="bg-neutral-50 text-neutral-900 section-rise" id="doswiadczenie">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:py-24">
       <div class="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-center">
-        <figure class="relative isolate overflow-hidden bg-neutral-100 shadow-[0_40px_120px_rgba(18,18,18,0.18)]">
+        <figure class="relative isolate overflow-hidden bg-neutral-100 shadow-[0_40px_120px_rgba(18,18,18,0.18)] rise-child">
           <img
             src="/wp-content/themes/kancelaria/assets/group.jpg"
             alt="Zespół prawników kancelarii - profesjonaliści w dziedzinie prawa"
@@ -183,7 +200,7 @@
           />
         </figure>
 
-        <div class="lg:pl-10 xl:pl-16">
+        <div class="lg:pl-10 xl:pl-16 rise-child" style="--rise-delay: 0.4s;">
           <!-- <p class="text-sm font-semibold uppercase tracking-[0.4em] text-red-800">Zaufanie budowane latami</p>
           <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-950 sm:text-5xl">
             Wspieramy przedsiębiorców w&nbsp;każdym etapie rozwoju
@@ -214,11 +231,11 @@
   </section>
 
     <!-- O NAS -->
-    <section id="onas" class="relative bg-neutral-100 text-neutral-900">
+    <section id="onas" class="relative bg-neutral-100 text-neutral-900 section-rise">
     <div class="mx-auto max-w-7xl px-6 py-24">
       <div class="grid gap-16 lg:grid-cols-12 lg:items-center">
         <!-- Tekst główny -->
-        <div class="lg:col-span-7 xl:col-span-6">
+        <div class="lg:col-span-7 xl:col-span-6 rise-child">
           <p class="text-sm font-semibold tracking-[0.4em] text-red-900/80">O NAS</p>
           <h2 class="mt-6 text-4xl font-semibold leading-tight md:text-5xl">
             Kancelaria Adwokacka Pawła Noworolnika świadczy kompleksową pomoc prawną z najwyższą starannością i zaangażowaniem.
@@ -235,7 +252,7 @@
         </div>
 
         <!-- Karta misji -->
-        <div class="relative lg:col-span-5 xl:col-span-5">
+        <div class="relative lg:col-span-5 xl:col-span-5 rise-child" style="--rise-delay: 0.35s;">
           <div class="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-10 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
             <span class="pointer-events-none absolute -right-10 -top-10 text-[12rem] font-semibold leading-none text-neutral-100" aria-hidden="true">N</span>
             <div class="relative">
@@ -257,9 +274,9 @@ echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary na
 ?>
 
   
-  <section id="lokalizacja" class="bg-white text-neutral-900">
+  <section id="lokalizacja" class="bg-white text-neutral-900 section-rise">
     <div class="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-20 lg:flex-row lg:items-start">
-      <div class="w-full lg:w-2/5">
+      <div class="w-full lg:w-2/5 rise-child">
         <p class="text-sm font-semibold uppercase tracking-[0.3em] text-red-900">Nasza siedziba</p>
         <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl">Spotkania w centrum miasta</h2>
         <p class="mt-6 text-base leading-relaxed text-neutral-600">
@@ -277,7 +294,7 @@ echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary na
         <?php endif; ?>
       </div>
 
-      <div class="w-full lg:w-3/5">
+      <div class="w-full lg:w-3/5 rise-child" style="--rise-delay: 0.45s;">
         <div class="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-2xl shadow-neutral-900/10">
           <div
             data-law-map
@@ -308,8 +325,37 @@ echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary na
     </div>
   </section>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var sections = document.querySelectorAll('.section-rise');
+      if (!sections.length) return;
+
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var supportsObserver = 'IntersectionObserver' in window;
+
+      if (prefersReducedMotion || !supportsObserver) {
+        sections.forEach(function (section) {
+          section.classList.add('is-visible');
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      sections.forEach(function (section) {
+        observer.observe(section);
+      });
+    });
+  </script>
+
   <?php
   // --- SEKCA NASZ ZESPÓŁ ---
 get_footer();
 ?>
-
