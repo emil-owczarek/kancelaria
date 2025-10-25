@@ -1,7 +1,7 @@
 <?php
   // --- USTAWIENIA ---
   $bgUrl      = '/wp-content/themes/kancelaria/assets/hero-bg.jpg';      // pełnoekranowe tło (bez człowieka)
-  $personUrl  = '/wp-content/themes/kancelaria/assets/person.png';       // wycięta postać z przezroczystością
+  $personUrl  = '/wp-content/themes/kancelaria/assets/person.webp';       // wycięta postać z przezroczystością
   $logoSvg    = '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19V7l8-4 8 4v12M4 19h16M8 21h8"/></svg>';
 ?>
 
@@ -38,6 +38,16 @@
   <script>
     document.documentElement.classList.add('js');
   </script>
+  <style>
+    body {
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+  </style>
   <?php wp_head(); ?>
 </head>
 <body class="bg-black text-white antialiased">
@@ -324,6 +334,12 @@ echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary na
       </div>
     </div>
   </section>
+
+  <script>
+    window.addEventListener('load', function () {
+      document.body.classList.add('loaded');
+    });
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
