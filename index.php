@@ -39,7 +39,7 @@
     document.documentElement.classList.add('js');
   </script>
   <style>
-    body {
+    /* body {
       opacity: 0;
       transition: opacity 0.6s ease-in-out;
       will-change: opacity;
@@ -47,7 +47,7 @@
 
     body.loaded {
       opacity: 1;
-    }
+    } */
   </style>
   <?php wp_head(); ?>
 </head>
@@ -335,12 +335,12 @@ echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary na
       </div>
     </div>
   </section>
-
+<!-- 
   <script>
     window.addEventListener('load', function () {
       document.body.classList.add('loaded');
     });
-  </script>
+  </script> -->
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
