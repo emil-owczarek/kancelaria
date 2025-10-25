@@ -42,6 +42,7 @@
     body {
       opacity: 0;
       transition: opacity 0.6s ease-in-out;
+      will-change: opacity;
     }
 
     body.loaded {
