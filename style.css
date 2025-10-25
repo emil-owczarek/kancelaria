@@ -14,11 +14,10 @@ Tags: law, kancelaria, business, responsive
 @keyframes heroEnter {
     0% {
         opacity: 0;
-        transform: translate3d(22px, 38px, 0) scale(0.94);
+        transform: scale(0.94);
     }
     60% {
         opacity: 1;
-        transform: translate3d(-6px, -8px, 0) scale(1.02);
     }
     100% {
         opacity: 1;
