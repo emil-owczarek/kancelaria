@@ -11,20 +11,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: law, kancelaria, business, responsive
 */
 
-@keyframes heroEnter {
-    0% {
-        opacity: 0;
-        transform: scale(0.94);
-    }
-    60% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-}
-
 @keyframes sectionRise {
     0% {
         opacity: 0;
@@ -114,10 +100,6 @@ Tags: law, kancelaria, business, responsive
       hue-rotate(-6deg);
     /* miękki cień, ale krótki – długi cień wygląda sztucznie */
     filter: drop-shadow(0 24px 32px rgba(0,0,0,.45));
-    will-change: transform, opacity;
-    opacity: 0;
-    transform: translate3d(22px, 38px, 0) scale(0.94);
-    animation: heroEnter 1.35s cubic-bezier(0.19, 1, 0.22, 1) 0.35s forwards;
   }
 
   /* Kontener do masek i „kontakt z ziemią” */
