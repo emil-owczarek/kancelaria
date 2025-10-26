@@ -83,34 +83,5 @@
     );
   ?>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var sections = document.querySelectorAll('.section-rise');
-      if (!sections.length) return;
-
-      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var supportsObserver = 'IntersectionObserver' in window;
-
-      if (prefersReducedMotion || !supportsObserver) {
-        sections.forEach(function (section) {
-          section.classList.add('is-visible');
-        });
-        return;
-      }
-
-      var observer = new IntersectionObserver(function (entries, obs) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-
-      sections.forEach(function (section) {
-        observer.observe(section);
-      });
-    });
-  </script>
 
   <?php get_footer(); ?>

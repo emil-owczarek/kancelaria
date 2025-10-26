@@ -170,6 +170,38 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+  // Efekt rise tylko raz na sesję
+  var sections = document.querySelectorAll('.section-rise');
+  if (sections.length) {
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var supportsObserver = 'IntersectionObserver' in window;
+    var hasSeenAnimations = sessionStorage.getItem('rise-animations-seen');
+
+    if (prefersReducedMotion || !supportsObserver) {
+      // Jeśli już widział animacje w tej sesji, pokaż od razu
+      sections.forEach(function (section) {
+        section.classList.add('is-visible');
+      });
+    } else {
+      // Pierwszy raz w sesji - pokaż animacje
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      sections.forEach(function (section) {
+        observer.observe(section);
+      });
+
+      // Oznacz że już widział animacje w tej sesji
+      sessionStorage.setItem('rise-animations-seen', 'true');
+    }
+  }
 });
 JS
   );
@@ -377,6 +409,8 @@ add_shortcode('team_section', function ($atts) {
   ob_start();
   $total = $q->found_posts;
   ?>
+
+  
 
   <section id='team' class="bg-stone-100 section-rise splide" data-team-splide data-min="2">
     <div class="mx-auto max-w-7xl px-6 py-16">
