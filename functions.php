@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Efekt rise tylko raz na sesję
+  // Efekt rise tylko raz na sesj
   var sections = document.querySelectorAll('.section-rise');
   if (sections.length) {
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
