@@ -4,10 +4,10 @@
  */
 ?>
 
-<section class="bg-neutral-50 text-neutral-900 section-rise" id="doswiadczenie">
+<section class="bg-stone-100 text-neutral-900 section-rise" id="doswiadczenie">
   <div class="mx-auto max-w-7xl px-6 py-20 lg:py-24">
     <div class="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-center">
-      <figure class="relative isolate overflow-hidden bg-neutral-100 shadow-[0_40px_120px_rgba(18,18,18,0.18)] rise-child">
+      <figure class="relative isolate overflow-hidden bg-neutral-100 rise-child">
         <img
           src="<?php echo esc_url(get_template_directory_uri() . '/assets/group.jpg'); ?>"
           alt="<?php esc_attr_e('Zespół prawników kancelarii - profesjonaliści w dziedzinie prawa', 'your-textdomain'); ?>"

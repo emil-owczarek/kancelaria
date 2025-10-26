@@ -4,17 +4,15 @@
  */
 ?>
 
-<section id="onas" class="relative bg-neutral-100 text-neutral-900 section-rise">
+<section id="onas" class="relative bg-stone-100 text-neutral-900 section-rise">
   <div class="mx-auto max-w-7xl px-6 py-24">
     <div class="grid gap-16 lg:grid-cols-12 lg:items-center">
       <div class="lg:col-span-7 xl:col-span-6 rise-child">
         <p class="text-sm font-semibold tracking-[0.4em] text-red-900/80"><?php esc_html_e('O NAS', 'your-textdomain'); ?></p>
-        <h2 class="mt-6 text-4xl font-semibold leading-tight md:text-5xl">
-          <?php esc_html_e('Kancelaria Adwokacka Pawła Noworolnika świadczy kompleksową pomoc prawną z najwyższą starannością i zaangażowaniem.', 'your-textdomain'); ?>
+        <h2 class="mt-6 text-lg leading-relaxed text-neutral-600">
+          <?php esc_html_e('Kancelaria Adwokacka Pawła Noworolnika świadczy kompleksową pomoc prawną z najwyższą starannością i zaangażowaniem. Łączymy wiedzę, doświadczenie i indywidualne podejście, by skutecznie chronić interesy naszych Klientów. Działamy odpowiedzialnie, z pełnym zrozumieniem realiów prawnych i biznesowych.', 'your-textdomain'); ?>
         </h2>
-        <p class="mt-6 text-lg leading-relaxed text-neutral-600">
-          <?php esc_html_e('Łączymy wiedzę, doświadczenie i indywidualne podejście, by skutecznie chronić interesy naszych Klientów. Działamy odpowiedzialnie, z pełnym zrozumieniem realiów prawnych i biznesowych.', 'your-textdomain'); ?>
-        </p>
+
         <div class="mt-10">
           <a href="<?php echo esc_url(home_url('/o-nas')); ?>" class="inline-flex items-center gap-3 rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium tracking-wide text-white transition hover:bg-neutral-800">
             <?php esc_html_e('Więcej o nas', 'your-textdomain'); ?>

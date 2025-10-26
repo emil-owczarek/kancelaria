@@ -16,15 +16,25 @@ $map = wp_parse_args(
     'address' => __('ul. Pawia 5, 31-154 Kraków', 'your-textdomain'),
   ]
 );
+
+$copy = wp_parse_args(
+  $args['copy'] ?? [],
+  [
+    'eyebrow'     => __('Nasza siedziba', 'your-textdomain'),
+    'heading'     => __('Spotkania w centrum miasta', 'your-textdomain'),
+    'description' => __('Zapraszamy do biura w sercu Poznania. W Personalizacji motywu możesz wprowadzić dokładny adres, aby wyświetlić go poniżej.', 'your-textdomain'),
+    'access_label'=> __('Dojazd', 'your-textdomain'),
+  ]
+);
 ?>
 
-<section id="lokalizacja" class="bg-white text-neutral-900 section-rise">
+<section id="kontakt" class="bg-white text-neutral-900 section-rise">
   <div class="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-20 lg:flex-row lg:items-start">
     <div class="w-full lg:w-2/5 rise-child">
-      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-red-900"><?php esc_html_e('Nasza siedziba', 'your-textdomain'); ?></p>
-      <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl"><?php esc_html_e('Spotkania w centrum miasta', 'your-textdomain'); ?></h2>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-red-900"><?php echo esc_html($copy['eyebrow']); ?></p>
+      <h2 class="mt-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl"><?php echo wp_kses_post($copy['heading']); ?></h2>
       <p class="mt-6 text-base leading-relaxed text-neutral-600">
-        <?php esc_html_e('Zapraszamy do biura w sercu Krakowa. W Personalizacji motywu możesz wprowadzić dokładny adres, aby wyświetlić go poniżej.', 'your-textdomain'); ?>
+        <?php echo wp_kses_post($copy['description']); ?>
       </p>
       <?php if (!empty($map['address'])) : ?>
         <div class="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 shadow-sm">
@@ -32,7 +42,7 @@ $map = wp_parse_args(
           <div class="mt-2 leading-relaxed"><?php echo esc_html($map['address']); ?></div>
           <div class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-neutral-500">
             <span class="inline-block h-px w-6 bg-neutral-300"></span>
-            <span><?php esc_html_e('Dojazd', 'your-textdomain'); ?></span>
+            <span><?php echo esc_html($copy['access_label']); ?></span>
           </div>
         </div>
       <?php endif; ?>

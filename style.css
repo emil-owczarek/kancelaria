@@ -11,6 +11,15 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: law, kancelaria, business, responsive
 */
 
+/* Font Helvetica Neue */
+@font-face {
+  font-family: 'Helvetica Neue';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: local('Helvetica Neue'), local('HelveticaNeue');
+}
+
 @keyframes sectionRise {
     0% {
         opacity: 0;
@@ -165,12 +174,20 @@ Tags: law, kancelaria, business, responsive
     }
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    opacity: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /* opacity: 0; */
     transition: opacity 0.6s ease-in-out;
     will-change: opacity;
   }
 
   body.loaded {
     opacity: 1;
+  }
+  #kontakt {
+    scroll-margin-top: -50px; /* dopasuj do wysokości nagłówka */
   }

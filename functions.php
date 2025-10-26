@@ -55,6 +55,14 @@ add_action('after_setup_theme', function () {
   add_image_size('team-card', 768, 960, true); // przycięcie do portretu
 });
 
+// Rejestracja menu nawigacyjnych
+add_action('after_setup_theme', function() {
+  register_nav_menus([
+    'primary'   => __('Główne menu', 'your-textdomain'),
+    'footer'    => __('Menu w stopce', 'your-textdomain'),
+  ]);
+});
+
 /**
  * ===== Enqueue Tailwind (jeśli kompilujesz sam — pomiń) + Splide =====
  * Jeśli Tailwind już masz w motywie, zostaw tylko Splide.
@@ -92,10 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (slides >= enableSlider) {
       new Splide(el, {
         type: 'slide',
-        perPage: 4,
+        perPage: 3,
         gap: '2rem',
         arrows: true,
         pagination: false,
+        
         breakpoints: {
           1280: { perPage: 3, gap: '1.5rem' },
           1024: { perPage: 2, gap: '1.25rem' },
@@ -360,23 +369,38 @@ add_shortcode('team_section', function ($atts) {
     'order'          => 'ASC',
   ]);
 
-  if (!$q->have_posts()) return '';
+  if (!$q->have_posts()) {
+    // Debug: sprawdź czy są posty
+    return '<!-- Team section: Brak postów team_member -->';
+  }
 
   ob_start();
   $total = $q->found_posts;
   ?>
 
-  <section class="bg-neutral-50 section-rise">
+  <section id='team' class="bg-stone-100 section-rise splide" data-team-splide data-min="2">
     <div class="mx-auto max-w-7xl px-6 py-16">
       <div class="mb-10 rise-child">
         <div class="text-sm tracking-widest text-red-800 font-semibold"><?php echo esc_html($atts['subtitle']); ?></div>
+        <div class='flex items-center '>
         <h2 class="mt-2 text-4xl md:text-5xl font-semibold leading-tight text-neutral-900">
           <?php echo esc_html($atts['title']); ?>
         </h2>
+                <div class="splide__arrows md:mt-0 mt-6 flex gap-4 justify-end">
+          <button class="splide__arrow splide__arrow--prev !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 hover:border-neutral-500">
+            <span class="sr-only">Poprzedni</span>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m10 12 5-5-1.41-1.41L7.17 12l6.42 6.41L15 17z"/></svg>
+          </button>
+          <button class="splide__arrow splide__arrow--next !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 hover:border-neutral-500">
+            <span class="sr-only">Następny</span>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m14 12-5 5 1.41 1.41L16.83 12l-6.42-6.41L9 7z"/></svg>
+          </button>
+        </div>
+</div>
         <div class="mt-6 border-t border-neutral-300"></div>
       </div>
 
-      <div class="splide rise-child" data-team-splide data-min="2" style="--rise-delay: 0.35s;">
+      <div class="rise-child" style="--rise-delay: 0.35s;">
         <div class="splide__track">
           <ul class="splide__list">
             <?php
@@ -431,18 +455,6 @@ add_shortcode('team_section', function ($atts) {
             wp_reset_postdata();
             ?>
           </ul>
-        </div>
-
-        <!-- Strzałki (Splide tworzy domyślne, ale daj własne – pokazywane tylko gdy slider aktywny) -->
-        <div class="splide__arrows md:mt-0 mt-6 flex gap-4 justify-end">
-          <button class="splide__arrow splide__arrow--prev !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 hover:border-neutral-500">
-            <span class="sr-only">Poprzedni</span>
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m10 12 5-5-1.41-1.41L7.17 12l6.42 6.41L15 17z"/></svg>
-          </button>
-          <button class="splide__arrow splide__arrow--next !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 hover:border-neutral-500">
-            <span class="sr-only">Następny</span>
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m14 12-5 5 1.41 1.41L16.83 12l-6.42-6.41L9 7z"/></svg>
-          </button>
         </div>
       </div>
     </div>
@@ -515,7 +527,8 @@ add_shortcode('specializations_section', function ($atts) {
   ]);
 
   if (!$query->have_posts()) {
-    return '';
+    // Debug: sprawdź czy są posty
+    return '<!-- Specializations section: Brak postów specialization -->';
   }
 
   $open_first = true;
@@ -528,7 +541,7 @@ add_shortcode('specializations_section', function ($atts) {
 
   ob_start();
   ?>
-  <section id="uslugi" class="bg-[#f4f2f5] py-20 md:py-24 section-rise">
+  <section id="services" class="bg-stone-100 py-20 md:py-24 section-rise">
     <div class="mx-auto max-w-7xl px-6">
       <div class="grid gap-12 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:items-start">
         <div class="max-w-xl rise-child">
@@ -537,6 +550,16 @@ add_shortcode('specializations_section', function ($atts) {
           <?php if (!empty($atts['description'])) : ?>
             <p class="mt-6 text-base leading-relaxed text-neutral-600"><?php echo wp_kses_post($atts['description']); ?></p>
           <?php endif; ?>
+          
+          <!-- Zdjęcie services.jpg pod tytułem -->
+          <div class="mt-8">
+            <img 
+              src="<?php echo get_template_directory_uri(); ?>/assets/services.jpg" 
+              alt="<?php esc_attr_e('Obszary naszych kompetencji', 'your-textdomain'); ?>"
+              class="w-full h-auto rounded-lg shadow-lg object-cover"
+              loading="lazy"
+            />
+          </div>
         </div>
 
         <div class="space-y-4 rise-child" data-accordion data-open-first="<?php echo $open_first ? 'true' : 'false'; ?>" data-accordion-single="true" style="--rise-delay: 0.35s;">
