@@ -1,8 +1,18 @@
 <?php
-  // --- USTAWIENIA ---
-  $bgUrl      = '/wp-content/themes/kancelaria/assets/hero-bg.jpg';
-  $personUrl  = '/wp-content/themes/kancelaria/assets/person.webp';
-  $logoSvg    = '<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+/**
+ * Front Page Template
+ *
+ * @package Kancelaria
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// --- USTAWIENIA ---
+$bgUrl      = '/wp-content/themes/kancelaria/assets/hero-bg.jpg';
+$personUrl  = '/wp-content/themes/kancelaria/assets/person.webp';
+$logoSvg    = '<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <rect width="23.7288" height="25" fill="url(#pattern0_50_85)"/>
   <defs>
   <pattern id="pattern0_50_85" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -12,76 +22,43 @@
   </defs>
   </svg>';
 
-  $mapApiKey  = get_theme_mod('law_firm_map_api_key', '');
-  $mapLat     = get_theme_mod('law_firm_map_lat', '50.064650');
-  $mapLng     = get_theme_mod('law_firm_map_lng', '19.944980');
-  $mapZoom    = get_theme_mod('law_firm_map_zoom', 16);
-  $mapLabel   = get_theme_mod('law_firm_map_label', __('Kancelaria Adwokacka Paweł Noworolnik', 'your-textdomain'));
-  $mapAddress = get_theme_mod('law_firm_map_address', __('ul. Pawia 5, 31-154 Kraków', 'your-textdomain'));
-?>
-<!doctype html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kancelaria</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+$mapApiKey  = get_theme_mod('law_firm_map_api_key', '');
+$mapLat     = get_theme_mod('law_firm_map_lat', '50.064650');
+$mapLng     = get_theme_mod('law_firm_map_lng', '19.944980');
+$mapZoom    = get_theme_mod('law_firm_map_zoom', 16);
+$mapLabel   = get_theme_mod('law_firm_map_label', __('Kancelaria Adwokacka Paweł Noworolnik', 'your-textdomain'));
+$mapAddress = get_theme_mod('law_firm_map_address', __('ul. Pawia 5, 31-154 Kraków', 'your-textdomain'));
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { 
-            sans: ['Helvetica Neue', 'Helvetica', 'ui-sans-serif', 'system-ui', 'Inter', 'Arial', 'sans-serif'],
-            helvetica: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif']
-          },
-        }
-      }
-    }
-  </script>
-  <script>
-    document.documentElement.classList.add('js');
-  </script>
-  <?php wp_head(); ?>
-</head>
-<body class="bg-black text-white antialiased">
-  <?php    the_content() ?>
-  <?php
-    get_template_part(
-      'template-parts/hero',
-      null,
-      [
-        'bg_url'     => $bgUrl,
-        'person_url' => $personUrl,
-        'logo_svg'   => $logoSvg,
+get_header();
 
-      ]
-    );
+get_template_part(
+  'template-parts/hero',
+  null,
+  [
+    'bg_url'     => $bgUrl,
+    'person_url' => $personUrl,
+    'logo_svg'   => $logoSvg,
+  ]
+);
 
+get_template_part('template-parts/about');
+get_template_part('template-parts/experience');
+echo do_shortcode('[team_section subtitle="NASZ ZESPÓŁ" title="Specjaliści w różnych dziedzinach prawa"]');
+echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary naszych kompetencji" open_first="true"]');
 
-    get_template_part('template-parts/about');
-    get_template_part('template-parts/experience');
-    echo do_shortcode('[team_section subtitle="NASZ ZESPÓŁ" title="Specjaliści w różnych dziedzinach prawa"]');
-    echo do_shortcode('[specializations_section subtitle="USŁUGI" title="Obszary naszych kompetencji" open_first="true"]');
+get_template_part(
+  'template-parts/location',
+  null,
+  [
+    'map' => [
+      'api_key' => $mapApiKey,
+      'lat'     => $mapLat,
+      'lng'     => $mapLng,
+      'zoom'    => $mapZoom,
+      'label'   => $mapLabel,
+      'address' => $mapAddress,
+    ],
+  ]
+);
 
-    get_template_part(
-      'template-parts/location',
-      null,
-      [
-        'map' => [
-          'api_key' => $mapApiKey,
-          'lat'     => $mapLat,
-          'lng'     => $mapLng,
-          'zoom'    => $mapZoom,
-          'label'   => $mapLabel,
-          'address' => $mapAddress,
-        ],
-      ]
-    );
-  ?>
-
-
-  <?php get_footer(); ?>
+get_footer();
