@@ -84,37 +84,9 @@ if (!$excerpt) {
 
 $contact_url = home_url('/kontakt');
 $team_url = home_url('/#team');
-?>
-<!doctype html>
-<html <?php language_attributes(); ?>>
-<head>
-  <meta charset="<?php bloginfo('charset'); ?>" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title><?php echo esc_html(get_the_title()); ?> – <?php bloginfo('name'); ?></title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Helvetica Neue', 'Helvetica', 'ui-sans-serif', 'system-ui', 'Inter', 'Arial', 'sans-serif'],
-            helvetica: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif']
-          },
-        }
-      }
-    }
-  </script>
-  <script>
-    document.documentElement.classList.add('js');
-  </script>
-  <?php wp_head(); ?>
-</head>
-<body <?php body_class('bg-black text-white antialiased'); ?>>
-<?php wp_body_open(); ?>
+get_header(); ?>
+
 <?php if (have_posts()) : the_post(); ?>
   <section class="relative isolate overflow-hidden min-h-[80vh]">
     <?php if ($office_url): ?>
