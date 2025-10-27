@@ -37,22 +37,24 @@ $copy = wp_parse_args(
         <?php echo wp_kses_post($copy['description']); ?>
       </p>
       <?php if (!empty($map['address'])) : ?>
-        <div class="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 shadow-sm">
+        <div class="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 shadow-sm location-card">
           <div class="font-medium text-neutral-900"><?php echo esc_html($map['label']); ?></div>
           <div class="mt-2 leading-relaxed"><?php echo esc_html($map['address']); ?></div>
           <div class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-neutral-500">
             <span class="inline-block h-px w-6 bg-neutral-300"></span>
-            <span><?php echo esc_html($copy['access_label']); ?></span>
+            <a href="https://maps.app.goo.gl/Ge9v22YxFKydCBWU6" target="_blank" rel="noopener noreferrer" class="text-red-700 hover:text-red-800 transition-colors">
+              <?php echo esc_html($copy['access_label']); ?>
+            </a>
           </div>
         </div>
       <?php endif; ?>
     </div>
 
     <div class="w-full lg:w-3/5 rise-child" style="--rise-delay: 0.45s;">
-      <div class="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-2xl shadow-neutral-900/10">
+      <div class="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-2xl shadow-neutral-900/10 location-map-wrapper">
         <div
           data-law-map
-          class="h-full w-full bg-neutral-200"
+          class="h-full w-full bg-neutral-200 law-map-canvas"
           data-api-key="<?php echo esc_attr($map['api_key']); ?>"
           data-lat="<?php echo esc_attr($map['lat']); ?>"
           data-lng="<?php echo esc_attr($map['lng']); ?>"

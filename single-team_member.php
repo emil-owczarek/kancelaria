@@ -161,15 +161,12 @@ get_header(); ?>
 
     <div class="relative z-10 mx-auto flex max-w-7xl flex-col-reverse items-center gap-12 px-6 pb-16 pt-10 md:flex-row md:pb-24 md:pt-16">
       <div class="flex-1">
-        <?php if (!empty($practice_names)) : ?>
-          <p class="text-sm font-semibold tracking-[0.4em] text-red-200/80 uppercase"><?php echo esc_html(implode(' • ', $practice_names)); ?></p>
+      <?php if ($position) : ?>
+          <p class="mt-3 text-lg uppercase tracking-[0.4em] text-red-200/80"><?php echo esc_html($position); ?></p>
         <?php endif; ?>
         <h1 class="mt-4 text-4xl font-semibold tracking-tight text-[#F5F5F5] sm:text-5xl md:text-6xl">
           <?php the_title(); ?>
         </h1>
-        <?php if ($position) : ?>
-          <p class="mt-3 text-lg uppercase tracking-[0.4em] text-white/60"><?php echo esc_html($position); ?></p>
-        <?php endif; ?>
 
         <?php if ($excerpt) : ?>
           <p class="mt-6 max-w-2xl text-base leading-relaxed text-white/85">
@@ -201,7 +198,7 @@ get_header(); ?>
   <main class="bg-stone-100 text-neutral-900">
     <section class="section-rise">
       <div class="mx-auto max-w-5xl px-6 py-20 grid gap-12 lg:grid-cols-[2fr,1fr] lg:items-start">
-        <article class="prose prose-neutral prose-lg max-w-none text-neutral-800 rise-child">
+        <article class="prose prose-neutral prose-lg max-w-none text-neutral-800 rise-child prose-p:my-[15px]">
           <?php
           $content = get_the_content();
           if ($content) {
@@ -216,7 +213,7 @@ get_header(); ?>
             <ul class="mt-6 space-y-3 text-sm font-medium leading-relaxed text-neutral-600">
               <?php if (!empty($practice_names)) : ?>
                 <?php foreach ($practice_names as $name) : ?>
-                  <li class="flex items-start gap-3">
+                  <li class="flex items-start gap-3 items-center">
                     <span aria-hidden="true" class="mt-1 inline-block h-2 w-2 rounded-full bg-red-900/70"></span>
                     <span><?php echo esc_html($name); ?></span>
                   </li>

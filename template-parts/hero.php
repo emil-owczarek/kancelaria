@@ -173,8 +173,8 @@ $current = pll_current_language();
     </div>
   </header>
 
-  <div class="relative z-10 mx-auto flex min-h-[60vh] max-w-7xl items-center px-6 pt-10">
-    <div class="flex-1">
+  <div class="relative z-10 mx-auto flex min-h-[60vh] max-w-7xl flex-col-reverse lg:flex-row items-center px-6 pt-10">
+    <div class="flex-1 order-2 lg:order-1">
       <p class="hero-subtext mb-4 text-lg italic text-white">
         <span class="mask-line pt-5 text-[2.5rem]" style="--delay: 1s;"><?php echo esc_html($hero['hero_claim']); ?></span>
       </p>
@@ -199,11 +199,11 @@ $current = pll_current_language();
       </div>
     </div>
 
-    <div class="person-wrap flex-1 mt-10  md:mt-0">
+    <div class="person-wrap flex-1 mt-10 lg:mt-0 order-1 lg:order-2">
       <img
         src="<?php echo esc_url($person_url); ?>"
         alt="<?php esc_attr_e('Radca prawny – portret', 'kancelaria'); ?>"
-        class="person-img mx-auto md:ml-auto select-none pointer-events-none object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.6)] max-h-[650px]"
+        class="person-img mx-auto lg:ml-auto select-none pointer-events-none object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.6)] max-h-[650px]"
         loading="eager"
         fetchpriority="high"
       />

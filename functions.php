@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (slides >= enableSlider) {
       new Splide(el, {
         type: 'slide',
-        perPage: 3,
+        perPage: 4,
         gap: '2rem',
         arrows: true,
         pagination: false,
@@ -351,10 +351,100 @@ add_action('wp_footer', function () {
         }
 
         var position = { lat: lat, lng: lng };
+        var defaultMapStyle = [
+          { elementType: 'geometry', stylers: [{ color: '#cacaca' }] },
+          { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+          { elementType: 'labels.text.fill', stylers: [{ color: '#333333' }] },
+          { elementType: 'labels.text.stroke', stylers: [{ color: '#f1f1f1' }] },
+          {
+            featureType: 'administrative',
+            elementType: 'labels.text.fill',
+            stylers: [{ color: '#4b4b4b' }]
+          },
+          {
+            featureType: 'administrative.land_parcel',
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }]
+          },
+          {
+            featureType: 'poi',
+            elementType: 'geometry.fill',
+            stylers: [{ color: '#b2b2b2' }]
+          },
+          {
+            featureType: 'poi',
+            elementType: 'labels.text.fill',
+            stylers: [{ color: '#4d4d4d' }]
+          },
+          {
+            featureType: 'poi.park',
+            elementType: 'geometry',
+            stylers: [{ color: '#aaaaaa' }]
+          },
+          {
+            featureType: 'poi.park',
+            elementType: 'labels.text.fill',
+            stylers: [{ color: '#3f3f3f' }]
+          },
+          {
+            featureType: 'road',
+            elementType: 'geometry.fill',
+            stylers: [{ color: '#ffffff' }]
+          },
+          {
+            featureType: 'road.arterial',
+            elementType: 'geometry',
+            stylers: [{ color: '#f7f7f7' }]
+          },
+          {
+            featureType: 'road.arterial',
+            elementType: 'geometry.stroke',
+            stylers: [{ color: '#bfbfbf' }]
+          },
+          {
+            featureType: 'road.highway',
+            elementType: 'geometry',
+            stylers: [{ color: '#ffffff' }]
+          },
+          {
+            featureType: 'road.highway',
+            elementType: 'geometry.stroke',
+            stylers: [{ color: '#b1b1b1' }]
+          },
+          {
+            featureType: 'road',
+            elementType: 'labels.text.fill',
+            stylers: [{ color: '#404040' }]
+          },
+          {
+            featureType: 'transit',
+            stylers: [{ visibility: 'off' }]
+          },
+          {
+            featureType: 'water',
+            elementType: 'geometry',
+            stylers: [{ color: '#a8afb5' }]
+          },
+          {
+            featureType: 'water',
+            elementType: 'labels.text.fill',
+            stylers: [{ color: '#424242' }]
+          }
+        ];
+
+        var mapStyle = defaultMapStyle;
+        if (mapContainer.dataset.mapStyle) {
+          try {
+            mapStyle = JSON.parse(mapContainer.dataset.mapStyle);
+          } catch (error) {
+            mapStyle = defaultMapStyle;
+          }
+        }
+
         var map = new google.maps.Map(mapContainer, {
           center: position,
           zoom: zoom,
-          styles: mapContainer.dataset.mapStyle ? JSON.parse(mapContainer.dataset.mapStyle) : null,
+          styles: mapStyle,
           disableDefaultUI: true,
           zoomControl: true,
         });
@@ -416,18 +506,22 @@ add_shortcode('team_section', function ($atts) {
     <div class="mx-auto max-w-7xl px-6 py-16">
       <div class="mb-10 rise-child">
         <div class="text-sm tracking-widest text-red-800 font-semibold"><?php echo esc_html($atts['subtitle']); ?></div>
-        <div class='flex items-center '>
+        <div class='flex items-center justify-between'>
         <h2 class="mt-2 text-4xl md:text-5xl font-semibold leading-tight text-neutral-900">
           <?php echo esc_html($atts['title']); ?>
         </h2>
-                <div class="splide__arrows md:mt-0 mt-6 flex gap-4 justify-end">
-          <button class="splide__arrow splide__arrow--prev !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 hover:border-neutral-500">
+        <div class="splide__arrows md:mt-0 mt-6 flex gap-4 justify-end">
+          <button class="splide__arrow splide__arrow--prev !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center">
             <span class="sr-only">Poprzedni</span>
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m10 12 5-5-1.41-1.41L7.17 12l6.42 6.41L15 17z"/></svg>
+            <svg width="25" height="14" viewBox="0 0 25 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17.2926 0.292893C17.6831 -0.0976311 18.3162 -0.0976311 18.7068 0.292893L24.7068 6.29289C25.0973 6.68342 25.0973 7.31658 24.7068 7.70711L18.7068 13.7071C18.3162 14.0976 17.6831 14.0976 17.2926 13.7071C16.902 13.3166 16.902 12.6834 17.2926 12.2929L21.5855 8H0C-0.000125676 7.5 0 7.55228 0 7C0 6.44772 -5.58562e-05 6.5 0 6H21.5855L17.2926 1.70711C16.902 1.31658 16.902 0.683417 17.2926 0.292893Z" fill="#700505"/>
+</svg>
           </button>
-          <button class="splide__arrow splide__arrow--next !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 hover:border-neutral-500">
+          <button class="splide__arrow splide__arrow--next !static !translate-x-0 inline-flex h-10 w-10 items-center justify-center">
             <span class="sr-only">Następny</span>
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m14 12-5 5 1.41 1.41L16.83 12l-6.42-6.41L9 7z"/></svg>
+            <svg width="25" height="14" viewBox="0 0 25 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17.2926 0.292893C17.6831 -0.0976311 18.3162 -0.0976311 18.7068 0.292893L24.7068 6.29289C25.0973 6.68342 25.0973 7.31658 24.7068 7.70711L18.7068 13.7071C18.3162 14.0976 17.6831 14.0976 17.2926 13.7071C16.902 13.3166 16.902 12.6834 17.2926 12.2929L21.5855 8H0C-0.000125676 7.5 0 7.55228 0 7C0 6.44772 -5.58562e-05 6.5 0 6H21.5855L17.2926 1.70711C16.902 1.31658 16.902 0.683417 17.2926 0.292893Z" fill="#700505"/>
+</svg>
           </button>
         </div>
 </div>
@@ -444,8 +538,16 @@ add_shortcode('team_section', function ($atts) {
               $img  = get_the_post_thumbnail($id, 'team-card', ['class' => 'w-full h-auto object-cover']);
               $name = get_the_title();
               $spec = '';
-              $terms = get_the_terms($id, 'practice_area');
-              if ($terms && !is_wp_error($terms)) $spec = $terms[0]->name;
+              
+              // Pobierz pozycję z pola team_position
+              $position = trim((string) get_field('team_position', $id));
+              if ($position) {
+                $spec = $position;
+              } else {
+                // Fallback na taksonomię jeśli brak pola team_position
+                $terms = get_the_terms($id, 'practice_area');
+                if ($terms && !is_wp_error($terms)) $spec = $terms[0]->name;
+              }
 
               // opis na hover: excerpt lub fragment treści
               $desc = get_the_excerpt();
@@ -602,8 +704,46 @@ add_shortcode('specializations_section', function ($atts) {
           while ($query->have_posts()) {
             $query->the_post();
             $id = get_the_ID();
-            $icon = get_post_meta($id, '_specialization_icon', true);
-            $excerpt = get_the_excerpt();
+            $icon_meta = get_post_meta($id, '_specialization_icon', true);
+            $icon_html = '';
+
+            if (function_exists('get_field')) {
+              $icon_field = get_field('svg_icon', $id);
+
+              if (!empty($icon_field)) {
+                $icon_url = '';
+                $icon_alt = '';
+
+                if (is_array($icon_field)) {
+                  $icon_url = $icon_field['url'] ?? '';
+                  $icon_alt = $icon_field['alt'] ?? ($icon_field['title'] ?? '');
+                } elseif (is_numeric($icon_field)) {
+                  $icon_id  = (int) $icon_field;
+                  $icon_url = wp_get_attachment_url($icon_id);
+                  $icon_alt = get_post_meta($icon_id, '_wp_attachment_image_alt', true);
+                } elseif (is_string($icon_field)) {
+                  $icon_url = $icon_field;
+                }
+
+                if (!empty($icon_url)) {
+                  if (empty($icon_alt)) {
+                    $icon_alt = get_the_title($id);
+                  }
+
+                  $icon_html = sprintf(
+                    '<img src="%s" alt="%s" class="h-6 w-6 object-contain" loading="lazy" decoding="async" />',
+                    esc_url($icon_url),
+                    esc_attr($icon_alt)
+                  );
+                }
+              }
+            }
+
+            if (empty($icon_html) && !empty($icon_meta)) {
+              $icon_html = wp_kses_post($icon_meta);
+            }
+
+            $excerpt = has_excerpt() ? get_the_excerpt() : '';
             $content = apply_filters('the_content', get_the_content());
             $content = wp_kses_post($content);
             $content_id = 'spec-content-' . $id;
@@ -611,11 +751,11 @@ add_shortcode('specializations_section', function ($atts) {
             ?>
             <div class="rounded-2xl border border-neutral-200 bg-white/90 shadow-sm transition-shadow hover:shadow-md rise-child" data-accordion-item style="--rise-delay: <?php echo esc_attr(number_format($item_delay, 2)); ?>s;">
               <button type="button" class="flex w-full items-center justify-between gap-6 px-6 py-5 text-left" data-accordion-trigger aria-expanded="false" aria-controls="<?php echo esc_attr($content_id); ?>">
-                <span class="flex flex-1 items-start gap-4">
+                <span class="flex flex-1 items-start gap-4 items-center">
                   <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
                     <?php
-                    if (!empty($icon)) {
-                      echo wp_kses_post($icon);
+                    if (!empty($icon_html)) {
+                      echo $icon_html; // already escaped above
                     } else {
                       ?>
                       <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
