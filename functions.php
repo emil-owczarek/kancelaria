@@ -15,8 +15,7 @@ add_action('init', function () {
     'menu_icon'    => 'dashicons-id',
     'supports'     => ['title', 'editor', 'excerpt', 'thumbnail'],
     'has_archive'  => false,
-    'rewrite'      => ['slug' => 'zespol'],
-    'show_in_rest' => true, // edycja w Gutenbergu
+    'rewrite'      => ['slug' => 'zespol', 'with_front' => false],
     'supports'     => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
   ]);
 
