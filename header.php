@@ -44,3 +44,4 @@ if (!defined('ABSPATH')) {
 </head>
 <body <?php body_class('bg-black text-white antialiased'); ?>>
 <?php wp_body_open(); ?>
+

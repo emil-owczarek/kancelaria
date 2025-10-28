@@ -697,7 +697,7 @@ add_shortcode('specializations_section', function ($atts) {
           </div>
         </div>
 
-        <div class="space-y-4 rise-child" data-accordion data-open-first="<?php echo $open_first ? 'true' : 'false'; ?>" data-accordion-single="true" style="--rise-delay: 0.35s;">
+        <div class="rise-child" data-accordion data-open-first="<?php echo $open_first ? 'true' : 'false'; ?>" data-accordion-single="true" style="--rise-delay: 0.35s;">
           <?php
           $item_index = 0;
           while ($query->have_posts()) {
@@ -730,7 +730,7 @@ add_shortcode('specializations_section', function ($atts) {
                   }
 
                   $icon_html = sprintf(
-                    '<img src="%s" alt="%s" class="h-6 w-6 object-contain" loading="lazy" decoding="async" />',
+                    '<img src="%s" alt="%s" class="h-7 w-7 object-contain" loading="lazy" decoding="async" />',
                     esc_url($icon_url),
                     esc_attr($icon_alt)
                   );
@@ -748,10 +748,10 @@ add_shortcode('specializations_section', function ($atts) {
             $content_id = 'spec-content-' . $id;
             $item_delay = 0.45 + ($item_index * 0.05);
             ?>
-            <div class="rounded-2xl border border-neutral-200 bg-white/90 shadow-sm transition-shadow hover:shadow-md rise-child" data-accordion-item style="--rise-delay: <?php echo esc_attr(number_format($item_delay, 2)); ?>s;">
+            <div class="border-b border-black/40 rise-child" data-accordion-item style="--rise-delay: <?php echo esc_attr(number_format($item_delay, 2)); ?>s;">
               <button type="button" class="flex w-full items-center justify-between gap-6 px-6 py-5 text-left" data-accordion-trigger aria-expanded="false" aria-controls="<?php echo esc_attr($content_id); ?>">
                 <span class="flex flex-1 items-start gap-4 items-center">
-                  <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
+                  <span class="flex h-12 w-12 shrink-0 items-center text-red-700">
                     <?php
                     if (!empty($icon_html)) {
                       echo $icon_html; // already escaped above
@@ -769,7 +769,7 @@ add_shortcode('specializations_section', function ($atts) {
                     <?php endif; ?>
                   </span>
                 </span>
-                <span class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-900" data-accordion-icon>
+                <span class="relative flex h-10 w-10 shrink-0 items-center justify-center text-neutral-900" data-accordion-icon>
                   <span class="accordion-line accordion-line--horizontal"></span>
                   <span class="accordion-line accordion-line--vertical"></span>
                 </span>

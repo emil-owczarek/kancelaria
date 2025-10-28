@@ -28,7 +28,7 @@ $copy = wp_parse_args(
 );
 ?>
 
-<section id="kontakt" class="bg-white text-neutral-900 section-rise">
+<section id="kontakt" class="bg-stone-100 text-neutral-900 section-rise">
   <div class="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-20 lg:flex-row lg:items-start">
     <div class="w-full lg:w-2/5 rise-child">
       <p class="text-sm font-semibold uppercase tracking-[0.3em] text-red-900"><?php echo esc_html($copy['eyebrow']); ?></p>
